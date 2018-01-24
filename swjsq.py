@@ -598,18 +598,18 @@ while true; do
         _ts=`date +%s`0000
         if test $do_down_accel -eq 1; then
             downResult=`$HTTP_REQ "$api_url/upgrade?peerid=$peerid&userid=$uid&sessionid=$session&user_type=1&client_type=android-swjsq-'''+APP_VERSION+'''&time_and=$_ts&client_version=androidswjsq-'''+APP_VERSION+'''&os=android-5.0.1.24SmallRice&dial_account='''+dial_account+'''"`
-			downErrorNo=`echo $downResult|grep -oE "errno..[0-9]+"|grep -oE "[0-9]+"`
-			downResultMessage=`echo $downResult|grep -oE "message...[\w\s\"]+"|grep -oE "\"[\w\s\"]+"`
-			log "Down upgrede finish , the errorNo is $downErrorNo"
-			if [[ -z $downResultMessage ]]; then
-				log "downResultMessage is $downResultMessage"
-			fi
+	    downErrorNo=`echo $downResult|grep -oE "errno..[0-9]+"|grep -oE "[0-9]+"`
+	    downResultMessage=`echo $downResult|grep -oE "message...[\w\s\"]+"|grep -oE "\"[\w\s\"]+"`
+	    log "Down upgrede finish , the errorNo is $downErrorNo"
+	    if [[ -z $downResultMessage ]]; then
+		log "downResultMessage is $downResultMessage"
+	    fi
         fi
         if test $do_up_accel -eq 1; then
             $HTTP_REQ "$api_up_url/upgrade?peerid=$peerid&userid=$uid&sessionid=$session&user_type=1&client_type=android-swjsq-'''+APP_VERSION+'''&time_and=$_ts&client_version=androidswjsq-'''+APP_VERSION+'''&os=android-5.0.1.24SmallRice&dial_account='''+dial_account+'''"
         fi
         i=1
-		log "upgrade finish . check the netspeed,if not upgraded,contact with Xunlei. going sleep 590s"
+	log "upgrade finish . check the netspeed,if not upgraded,contact with Xunlei. going sleep 590s"
         sleep 590
         continue
     fi
