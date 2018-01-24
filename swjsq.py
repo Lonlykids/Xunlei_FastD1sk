@@ -638,7 +638,8 @@ while true; do
 		error_code=`echo $ret|grep -oE "errorCode...[0-9]+"|grep -oE "[0-9]+"`
 		if [[ -z $error_code || $error_code -ne 0 ]]; then
 			i=100
-		    log "Get loginKey Fail ! Error Code is $error_code . ReLogin ...."
+			log "Get loginKey Fail ! Error Code is $error_code . ReLogin ...."
+			log "ret is $ret"
 			continue
 		fi
 		session_temp=`echo $ret|grep -oE "sessionID...[A-F,0-9]{32}"`
