@@ -52,7 +52,7 @@ log_file = 'swjsq.log'
 
 login_xunlei_intv = 600 # do not login twice in 10min
 
-DEVICE = "SmallRice R1"
+DEVICE = "SONY Z1"
 OS_VERSION = "5.0.1"
 
 header_xl = {
@@ -558,6 +558,7 @@ do_down_accel='''+str(int(self.do_down_accel))+'''
 do_up_accel='''+str(int(self.do_up_accel))+'''
 
 i=100
+firstLogin=1
 while true; do
     if test $i -ge 100; then
         tmstmp=`date "+%s"`
@@ -598,18 +599,18 @@ while true; do
         _ts=`date +%s`0000
         if test $do_down_accel -eq 1; then
             downResult=`$HTTP_REQ "$api_url/upgrade?peerid=$peerid&userid=$uid&sessionid=$session&user_type=1&client_type=android-swjsq-'''+APP_VERSION+'''&time_and=$_ts&client_version=androidswjsq-'''+APP_VERSION+'''&os=android-5.0.1.24SmallRice&dial_account='''+dial_account+'''"`
-	    downErrorNo=`echo $downResult|grep -oE "errno..[0-9]+"|grep -oE "[0-9]+"`
-	    downResultMessage=`echo $downResult|grep -oE "message...[\w\s\"]+"|grep -oE "\"[\w\s\"]+"`
-	    log "Down upgrede finish , the errorNo is $downErrorNo"
-	    if [[ -z $downResultMessage ]]; then
-		log "downResultMessage is $downResultMessage"
-	    fi
-        fi
-        if test $do_up_accel -eq 1; then
-            $HTTP_REQ "$api_up_url/upgrade?peerid=$peerid&userid=$uid&sessionid=$session&user_type=1&client_type=android-swjsq-'''+APP_VERSION+'''&time_and=$_ts&client_version=androidswjsq-'''+APP_VERSION+'''&os=android-5.0.1.24SmallRice&dial_account='''+dial_account+'''"
-        fi
-        i=1
-	log "upgrade finish . check the netspeed,if not upgraded,contact with Xunlei. going sleep 590s"
+			downErrorNo=`echo $downResult|grep -oE "errno..[0-9]+"|grep -oE "[0-9]+"`
+			downResultMessage=`echo $downResult|grep -oE "message...[\w\s\"]+"|grep -oE "\"[\w\s\"]+"`
+			log "Down upgrede finish , the errorNo is $downErrorNo"
+			if [[ -z $downResultMessage ]]; then
+				log "downResultMessage is $downResultMessage"
+			fi
+		fi
+		if test $do_up_accel -eq 1; then
+			$HTTP_REQ "$api_up_url/upgrade?peerid=$peerid&userid=$uid&sessionid=$session&user_type=1&client_type=android-swjsq-'''+APP_VERSION+'''&time_and=$_ts&client_version=androidswjsq-'''+APP_VERSION+'''&os=android-5.0.1.24SmallRice&dial_account='''+dial_account+'''"
+		fi
+		i=1
+		log "upgrade finish . check the netspeed,if not upgraded,contact with Xunlei. going sleep 590s"
         sleep 590
         continue
     fi
@@ -633,26 +634,31 @@ while true; do
     fi
 
 	if test $i -eq 9; then
-		log "renew xunlei"
-		ret=`$HTTP_REQ https://mobile-login.xunlei.com:443/loginkey $POST_ARG"'''+json.dumps(xl_renew_payload).replace('"','\\"')+'''" --header "$UA_XL"`
-		error_code=`echo $ret|grep -oE "errorCode...[0-9]+"|grep -oE "[0-9]+"`
-		if [[ -z $error_code || $error_code -ne 0 ]]; then
-			i=100
-			log "Get loginKey Fail ! Error Code is $error_code . ReLogin ...."
-			log "ret is $ret"
-			continue
-		fi
-		session_temp=`echo $ret|grep -oE "sessionID...[A-F,0-9]{32}"`
-		session=`echo $session_temp|grep -oE "[A-F,0-9]{32}"`
-		loginkey=`echo $ret|grep -oE "lk...[a-f,0-9,\.]{96}"`
-		if [ -z "$session" ]; then
-			log "renew session is empty"
-			i=100
-			sleep 60
-			uid=$uid_orig
-			continue
+		if test $firstLogin -eq 1; then
+			firstLogin=0
+			log "First Login , skip renew...."
 		else
-			log "renew Done ! session is $session"
+#log "renew xunlei"
+			ret=`$HTTP_REQ https://mobile-login.xunlei.com:443/loginkey $POST_ARG"'''+json.dumps(xl_renew_payload).replace('"','\\"')+'''" --header "$UA_XL"`
+			error_code=`echo $ret|grep -oE "errorCode...[0-9]+"|grep -oE "[0-9]+"`
+			if [[ -z $error_code || $error_code -ne 0 ]]; then
+				i=100
+				log "Get loginKey Fail ! Error Code is $error_code . ReLogin ...."
+				log "ret is $ret"
+				continue
+			fi
+			session_temp=`echo $ret|grep -oE "sessionID...[A-F,0-9]{32}"`
+			session=`echo $session_temp|grep -oE "[A-F,0-9]{32}"`
+			loginkey=`echo $ret|grep -oE "lk...[a-f,0-9,\.]{96}"`
+			if [ -z "$session" ]; then
+				log "renew session is empty"
+				i=100
+				sleep 60
+				uid=$uid_orig
+				continue
+			else
+				log "renew Done ! session is $session"
+			fi
 		fi
 	fi
 
