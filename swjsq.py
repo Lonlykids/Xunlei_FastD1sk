@@ -587,7 +587,7 @@ while true; do
         fi
 
         if [ -z "$uid" ]; then
-            #echo "uid is empty"
+            log "uid is empty"
             uid=$uid_orig
         else
             log "uid is $uid"
@@ -595,12 +595,12 @@ while true; do
     fi
 
     if test $i -eq 18; then
-        log "upgrade"
+        log "upgrade begin"
         _ts=`date +%s`0000
         if test $do_down_accel -eq 1; then
             downResult=`$HTTP_REQ "$api_url/upgrade?peerid=$peerid&userid=$uid&sessionid=$session&user_type=1&client_type=android-swjsq-'''+APP_VERSION+'''&time_and=$_ts&client_version=androidswjsq-'''+APP_VERSION+'''&os=android-5.0.1.24SmallRice&dial_account='''+dial_account+'''"`
 			downErrorNo=`echo $downResult|grep -oE "errno..[0-9]+"|grep -oE "[0-9]+"`
-			downResultMessage=`echo $downResult|grep -oE "message...[\w\s\"]+"|grep -oE "\"[\w\s\"]+"`
+			downResultMessage=`echo $downResult|grep -oE "message...[\w\s\\"]+"|grep -oE "\\"[\w\s\\"]+"`
 			log "Down upgrede finish , the errorNo is $downErrorNo"
 			if [[ -z $downResultMessage ]]; then
 				log "downResultMessage is $downResultMessage"
@@ -662,7 +662,7 @@ while true; do
 		fi
 	fi
 
-    log "keepalive"
+#log "keepalive"
     _ts=`date +%s`0000
     if test $do_down_accel -eq 1; then
         ret=`$HTTP_REQ "$api_url/keepalive?peerid=$peerid&userid=$uid&sessionid=$session&client_type=android-swjsq-'''+APP_VERSION+'''&time_and=$_ts&client_version=androidswjsq-'''+APP_VERSION+'''&os=android-5.0.1.24SmallRice&dial_account='''+dial_account+'''"`
