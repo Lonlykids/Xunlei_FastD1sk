@@ -699,21 +699,23 @@ while true; do
     if test $do_down_accel -eq 1; then
         ret=`$HTTP_REQ "$api_url/keepalive?peerid=$peerid&userid=$uid&sessionid=$session&client_type=android-swjsq-'''+APP_VERSION+'''&time_and=$_ts&client_version=androidswjsq-'''+APP_VERSION+'''&os=android-'''+OS_VERSION+'.'+OS_API_LEVEL+DEVICE_MODEL+'''&dial_account='''+dial_account+'''"`
        if [[ -z $ret ]]; then
-			log "提速状态失效 , 1分钟后重新进行提速"
+	    log "提速状态失效 , 1分钟后重新进行提速"
             sleep 60
             i=18
             continue
         fi
         if [ ! -z "`echo $ret|grep "not exist channel"`" ]; then
-			log "通道查询错误~请到k.xunlei.com检查线路~然后重启光猫和路由"
+	    log "通道查询错误~请到k.xunlei.com检查线路~然后重启光猫和路由"
+	    log "$ret"
             sleep 60
             i=18
             continue
         fi
         if  [ ! -z "`echo $ret|grep "user not has business property"`" ]; then
             log "到期了...该续费了...关闭快吊中...."
+	    log "$ret"
             do_down_accel=0
-			i=18
+	    i=18
             sleep 60
             continue
         fi
