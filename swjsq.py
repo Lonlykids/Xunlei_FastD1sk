@@ -688,7 +688,7 @@ while true; do
             $HTTP_REQ "$api_up_url/recover?peerid=$peerid&userid=$uid&sessionid=$session&client_type=android-uplink-'''+APP_VERSION+'''&time_and=$_ts&client_version=androiduplink-'''+APP_VERSION+'''&os=android-'''+OS_VERSION+'.'+OS_API_LEVEL+DEVICE_MODEL+'''&dial_account='''+dial_account+'''"
         fi
         sleep 5
-        #i=100
+        i=18
         continue
     fi
 
