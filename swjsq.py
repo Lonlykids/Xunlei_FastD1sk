@@ -603,7 +603,7 @@ do_up_accel='''+str(int(self.do_up_accel))+'''
 
 i=18
 while true; do
-    if test $i -eq18; then
+    if test $i -eq 18; then
         tmstmp=`date "+%s"`
         let slp=login_xunlei_intv-tmstmp+last_login_xunlei
         if test $slp -ge 0; then
