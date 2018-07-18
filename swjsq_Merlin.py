@@ -685,15 +685,15 @@ if test $i -eq 99; then
 	day_of_month=`echo $day_of_month_orig|grep -oE "[1-9]{1,2}"`
 	if [[ -z $orig_day_of_month || $day_of_month -ne $orig_day_of_month ]]; then
 		log "recover"
-		orig_day_of_month=$day_of_month
-		dbus set fastd1ck_orig_day_of_month=$orig_day_of_month
+		dbus set fastd1ck_orig_day_of_month=$orig_day_of_month		
+		dbus set fastd1ck_day_of_month_orig=$day_of_month
 		_ts=`date +%s`0000
-        if test $do_down_accel -eq 1; then
-            $HTTP_REQ "$api_url/recover?peerid=$peerid&userid=$uid&sessionid=$session&client_type=android-swjsq-'''+APP_VERSION+'''&time_and=$_ts&client_version=androidswjsq-'''+APP_VERSION+'''&os=android-'''+OS_VERSION+'.'+OS_API_LEVEL+DEVICE_MODEL+'''&dial_account='''+dial_account+'''"
-        fi
-        if test $do_up_accel -eq 1; then
-            $HTTP_REQ "$api_up_url/recover?peerid=$peerid&userid=$uid&sessionid=$session&client_type=android-uplink-'''+APP_VERSION+'''&time_and=$_ts&client_version=androiduplink-'''+APP_VERSION+'''&os=android-'''+OS_VERSION+'.'+OS_API_LEVEL+DEVICE_MODEL+'''&dial_account='''+dial_account+'''"
-        fi
+		if test $do_down_accel -eq 1; then
+		    $HTTP_REQ "$api_url/recover?peerid=$peerid&userid=$uid&sessionid=$session&client_type=android-swjsq-'''+APP_VERSION+'''&time_and=$_ts&client_version=androidswjsq-'''+APP_VERSION+'''&os=android-'''+OS_VERSION+'.'+OS_API_LEVEL+DEVICE_MODEL+'''&dial_account='''+dial_account+'''"
+		fi
+		if test $do_up_accel -eq 1; then
+		    $HTTP_REQ "$api_up_url/recover?peerid=$peerid&userid=$uid&sessionid=$session&client_type=android-uplink-'''+APP_VERSION+'''&time_and=$_ts&client_version=androiduplink-'''+APP_VERSION+'''&os=android-'''+OS_VERSION+'.'+OS_API_LEVEL+DEVICE_MODEL+'''&dial_account='''+dial_account+'''"
+		fi
 		login
 		upgrade
 	fi
