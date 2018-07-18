@@ -685,7 +685,7 @@ if test $i -eq 99; then
 	day_of_month=`echo $day_of_month_orig|grep -oE "[1-9]{1,2}"`
 	if [[ -z $orig_day_of_month || $day_of_month -ne $orig_day_of_month ]]; then
 		log "recover"
-		dbus set fastd1ck_orig_day_of_month=$orig_day_of_month		
+		dbus set fastd1ck_orig_day_of_month=$day_of_month		
 		dbus set fastd1ck_day_of_month_orig=$day_of_month
 		_ts=`date +%s`0000
 		if test $do_down_accel -eq 1; then
